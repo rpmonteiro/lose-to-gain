@@ -1,0 +1,57 @@
+{
+    "name": "jobs-backend",
+    "version": "1.0.0",
+    "description": "Backend for all the jobs websites",
+    "main": "index.ts",
+    "scripts": {
+        "migrate": "db-migrate up --config configs/database.json",
+        "generate-db-interfaces": "schemats generate -o ./src/db-types.ts",
+        "dev": "yarn run generate-db-interfaces && ENVIRONMENT=dev ts-node ./src",
+        "compile": "tsc",
+        "test": "mocha --opts configs/mocha.opts",
+        "seed-data": "ENVIRONMENT=dev ts-node scripts/add-seed-data.ts",
+        "postinstall": "pm2 install typescript && pm2 install ts-node"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@bitbucket.org/rpmonteiro/jobs-backend.git"
+    },
+    "author": "Ricardo Monteiro",
+    "license": "ISC",
+    "homepage": "https://bitbucket.org/rpmonteiro/jobs-backend#readme",
+    "dependencies": {
+        "@koa/cors": "2",
+        "db-migrate": "^0.11.5",
+        "db-migrate-pg": "^0.5.1",
+        "dotenv": "^6.0.0",
+        "google-auth-library": "^4.0.0",
+        "koa": "^2.5.2",
+        "koa-bodyparser": "^4.2.1",
+        "koa-helmet": "^4.0.0",
+        "koa-router": "^7.4.0",
+        "pm2": "^3.2.3",
+        "pogi": "^2.5.14",
+        "schemats": "^3.0.3",
+        "winston": "^3.0.0"
+    },
+    "devDependencies": {
+        "@types/dotenv": "^4.0.3",
+        "@types/expect": "^1.20.3",
+        "@types/joi": "^13.6.0",
+        "@types/koa": "^2.0.46",
+        "@types/koa-bodyparser": "^4.2.2",
+        "@types/koa-helmet": "^3.1.2",
+        "@types/koa-router": "^7.0.31",
+        "@types/koa__cors": "^2.2.2",
+        "@types/mocha": "^5.2.5",
+        "@types/node": "^10.9.2",
+        "expect": "^23.6.0",
+        "mocha": "^5.2.0",
+        "nodemon": "^1.18.3",
+        "ts-node": "^7.0.1",
+        "tslint": "^5.11.0",
+        "tslint-config-airbnb": "^5.11.0",
+        "tslint-config-prettier": "^1.15.0",
+        "typescript": "^3.4.5"
+    }
+}

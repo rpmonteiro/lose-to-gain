@@ -1,0 +1,3 @@
+{
+    "dev": "postgresql://localhost:5432/lose-to-gain"
+}
