@@ -6,11 +6,10 @@
     "scripts": {
         "migrate": "db-migrate up --config configs/database.json",
         "generate-db-interfaces": "schemats generate -o ./src/db-types.ts",
-        "dev": "yarn run generate-db-interfaces && ENVIRONMENT=dev ts-node ./src",
+        "dev": "yarn run generate-db-interfaces && ENVIRONMENT=dev ts-node-dev --respawn --transpileOnly src/index.ts",
         "compile": "tsc",
         "test": "mocha --opts configs/mocha.opts",
-        "seed-data": "ENVIRONMENT=dev ts-node scripts/add-seed-data.ts",
-        "postinstall": "pm2 install typescript && pm2 install ts-node"
+        "seed-data": "ENVIRONMENT=dev ts-node scripts/add-seed-data.ts"
     },
     "repository": {
         "type": "git",
@@ -49,6 +48,7 @@
         "mocha": "^5.2.0",
         "nodemon": "^1.18.3",
         "ts-node": "^7.0.1",
+        "ts-node-dev": "^1.0.0-pre.39",
         "tslint": "^5.11.0",
         "tslint-config-airbnb": "^5.11.0",
         "tslint-config-prettier": "^1.15.0",

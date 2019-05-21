@@ -14,16 +14,21 @@ exports.up = function(db) {
                 notNull: true
             },
             first_name: {
-                type: 'string',
-                notNull: true
+                type: 'string'
             },
             last_name: {
-                type: 'string',
-                notNull: true
+                type: 'string'
             },
             google_id: {
-                type: 'string',
-                notNull: true
+                unique: true,
+                type: 'string'
+            },
+            active: {
+                type: 'boolean',
+                defaultValue: false
+            },
+            invited_by: {
+                type: 'int'
             }
         }
     })
