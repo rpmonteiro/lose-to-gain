@@ -1,1 +1,1 @@
-declare module 'parse-database-url'
+declare module 'fitbit-node'

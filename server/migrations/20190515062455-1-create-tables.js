@@ -23,6 +23,10 @@ exports.up = function(db) {
                 unique: true,
                 type: 'string'
             },
+            fitbit_token: {
+                type: 'string',
+                unique: true
+            },
             active: {
                 type: 'boolean',
                 defaultValue: false

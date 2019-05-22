@@ -8,7 +8,7 @@ import { sanitizeGoogleEmail } from '../utils/string-utils'
 
 const client = new OAuth2Client(config.googleAppId)
 
-export async function authenticateUser(ctx: BaseContext) {
+export async function googleAuth(ctx: BaseContext) {
     const googleIdToken = ctx.request.body.googleToken
     if (!googleIdToken) {
         ctx.throw(400, 'no token!')
@@ -34,20 +34,16 @@ export async function authenticateUser(ctx: BaseContext) {
         user = await createNewUser(ctx, googleUserObject)
     }
 
-    ctx.body = {
-        user
-    }
+    ctx.body = user
 }
 
 // tslint:disable-next-line:max-line-length
-async function createNewUser(
-    ctx: BaseContext,
-    googleUserObject: TokenPayload
-): Promise<dbTypes.users> {
+function createNewUser(ctx: BaseContext, googleUserObject: TokenPayload): Promise<dbTypes.users> {
     const newUser: Omit<dbTypes.users, 'id'> = {
         email: sanitizeGoogleEmail(googleUserObject.email),
         first_name: googleUserObject.given_name as string,
         last_name: googleUserObject.family_name as string,
+        fitbit_token: null,
         google_id: googleUserObject.sub,
         active: true,
         invited_by: null
@@ -57,7 +53,7 @@ async function createNewUser(
 }
 
 // tslint:disable-next-line:max-line-length
-async function activateUser(
+function activateUser(
     ctx: BaseContext,
     user: dbTypes.users,
     googleUserObject: TokenPayload
