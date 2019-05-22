@@ -28,9 +28,7 @@ export async function fitbitAuth(ctx: BaseContext) {
 
     // user is already authenticated with fitbit
     if (Boolean(user.fitbit_token)) {
-        ctx.body = {
-            lala: 'lala 123'
-        }
+        ctx.status = 200
         return
     }
 

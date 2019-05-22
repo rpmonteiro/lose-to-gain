@@ -2,9 +2,9 @@ import { BaseContext } from 'koa'
 import { OAuth2Client } from 'google-auth-library'
 import { config } from '../config'
 import * as dbTypes from '../db-types'
-import { TokenPayload } from 'google-auth-library/build/src/auth/loginticket'
-import { Omit } from '../types'
 import { sanitizeGoogleEmail } from '../utils/string-utils'
+import { UserVM } from '../../../shared-types'
+import { activateUser, createNewUser } from '../repository/user'
 
 const client = new OAuth2Client(config.googleAppId)
 
@@ -34,34 +34,13 @@ export async function googleAuth(ctx: BaseContext) {
         user = await createNewUser(ctx, googleUserObject)
     }
 
-    ctx.body = user
+    ctx.body = toUserVM(user)
 }
 
-// tslint:disable-next-line:max-line-length
-function createNewUser(ctx: BaseContext, googleUserObject: TokenPayload): Promise<dbTypes.users> {
-    const newUser: Omit<dbTypes.users, 'id'> = {
-        email: sanitizeGoogleEmail(googleUserObject.email),
-        first_name: googleUserObject.given_name as string,
-        last_name: googleUserObject.family_name as string,
-        fitbit_token: null,
-        google_id: googleUserObject.sub,
-        active: true,
-        invited_by: null
+function toUserVM(user: dbTypes.users): UserVM {
+    return {
+        google_id: user.google_id || '',
+        first_name: user.first_name || '',
+        fitbit_linked: Boolean(user.fitbit_token)
     }
-
-    return ctx.db.tables.users.insertAndGet(newUser)
-}
-
-// tslint:disable-next-line:max-line-length
-function activateUser(
-    ctx: BaseContext,
-    user: dbTypes.users,
-    googleUserObject: TokenPayload
-): Promise<dbTypes.users> {
-    user.active = true
-    user.first_name = googleUserObject.given_name || ''
-    user.last_name = googleUserObject.family_name || ''
-    user.google_id = googleUserObject.sub
-
-    return ctx.db.tables.users.insertAndGet(user)
 }

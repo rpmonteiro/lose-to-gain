@@ -2,19 +2,10 @@ import React, { Component } from 'react'
 import './App.css'
 import GoogleLogin from 'react-google-login'
 import axios from 'axios'
-
-interface User {
-    active: boolean
-    email: string
-    first_name: string
-    google_id: string
-    id: number
-    invited_by: null | string
-    last_name: string
-}
+import { UserVM } from '../../shared-types'
 
 interface AppState {
-    user: User
+    user: UserVM
     fitbitLoggedIn: boolean
     loggedInGoogle: boolean
 }
@@ -22,41 +13,17 @@ interface AppState {
 export default class App extends Component<{}, AppState> {
     state = {
         user: {
-            active: false,
-            email: '',
-            first_name: '',
             google_id: '',
-            id: 0,
-            invited_by: null,
-            last_name: ''
+            first_name: '',
+            fitbit_linked: false
         },
         fitbitLoggedIn: false,
         loggedInGoogle: false
     }
 
-    componentDidMount() {
-        const url = window.location.href
-        if (url.includes('fitbit-auth')) {
-            setTimeout(() => {
-                console.log('user', this.state.user)
-                const authCode = window.location.search.split('code=')[1]
-                // window.location.replace('http://localhost:3000')
-                axios
-                    .post('http://localhost:5000/fitbit-auth', {
-                        userId: this.state.user.id,
-                        fitbitAuthCode: authCode
-                    })
-                    .then((lala) => console.log({ lala }))
-                    .catch((err) => {
-                        console.log({ err })
-                    })
-            }, 3000)
-        }
-    }
-
     onGoogleLogin = (res: any) => {
         axios
-            .post<User>('http://localhost:5000/google-auth', {
+            .post<UserVM>('http://localhost:5000/google-auth', {
                 googleToken: res.tokenId
             })
             .then((response) => {
@@ -72,6 +39,7 @@ export default class App extends Component<{}, AppState> {
     render() {
         const { loggedInGoogle, user } = this.state
 
+        const userIsConnectedToFitbit = user.fitbit_linked
         const googleLoginButton = (
             <GoogleLogin
                 clientId="1022232016844-5umaao3o00c6fm920vsgitgkhnb3gr9b.apps.googleusercontent.com"
@@ -83,15 +51,19 @@ export default class App extends Component<{}, AppState> {
             />
         )
 
+        const fitbitLoginButton = (
+            <a href="https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22DPRT&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Ffitbit-auth&scope=weight&expires_in=604800">
+                Fitbit
+            </a>
+        )
+
         const userInfo = loggedInGoogle && <div>{(user as any).first_name}</div>
 
         return (
             <div className="App">
                 {!loggedInGoogle && googleLoginButton}
                 {userInfo}
-                <a href="https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22DPRT&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Ffitbit-auth&scope=weight&expires_in=604800">
-                    Fitbit
-                </a>
+                {loggedInGoogle && !userIsConnectedToFitbit && fitbitLoginButton}
             </div>
         )
     }
