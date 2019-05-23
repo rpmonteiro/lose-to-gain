@@ -8,7 +8,6 @@ export function findUser(ctx: BaseContext, googleId: string): Promise<dbTypes.us
     return ctx.db.tables.user.findOne({ google_id: googleId })
 }
 
-// tslint:disable-next-line
 export function createNewUser(
     ctx: BaseContext,
     googleUserObject: TokenPayload
@@ -26,7 +25,6 @@ export function createNewUser(
     return ctx.db.tables.users.insertAndGet(newUser)
 }
 
-// tslint:disable-next-line:max-line-length
 export function activateUser(
     ctx: BaseContext,
     user: dbTypes.users,

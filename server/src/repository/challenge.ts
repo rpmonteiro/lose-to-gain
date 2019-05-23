@@ -1,7 +1,8 @@
 import { BaseContext } from 'koa'
 import * as dbTypes from '../db-types'
+import { Challenge } from '../../../shared-types'
+import { Omit } from '../types'
 
-// TODO: Left join query to match google_id to user_id
 export function findUserChallenges(
     ctx: BaseContext,
     googleId: string
@@ -10,12 +11,31 @@ export function findUserChallenges(
         `
         SELECT * FROM challenges c
         WHERE id IN (
-            select challenge_id
+            SELECT challenge_id
             FROM users_challenges
-            WHERE user_1 = $1
-            OR user_2 = $1
+            WHERE user_1 = (
+                SELECT id FROM users WHERE google_id = $1
+            )
+            OR user_2 = (
+                SELECT id FROM users WHERE google_id = $1
+            )
         )
     `,
         [googleId]
+    )
+}
+
+/*
+    Create new challenge row and new row on the pivot table users_challenges
+*/
+export function insertChallenge(ctx: BaseContext, challenge: Omit<Challenge, 'id'>) {
+    const users = Object.keys(challenge.goals)
+
+    return ctx.db.tables.challenges.insertAndGet(challenge).then((newChallengeRow: Challenge) =>
+        ctx.db.tables.users_challenges.insert({
+            challenge_id: newChallengeRow.id,
+            user_1: users[0],
+            user_2: users[1]
+        })
     )
 }
