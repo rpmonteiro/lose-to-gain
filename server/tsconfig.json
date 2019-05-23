@@ -1,32 +1,13 @@
 {
-    "compilerOptions": {
-        "outDir": "dist",
-        "target": "es5",
-        "lib": ["es6", "es7", "dom"],
-        "typeRoots": ["./node_modules/@types", "./src/typings", "../shared-types"],
-        "resolveJsonModule": true,
-        "sourceMap": true,
-        "allowJs": false,
-        "jsx": "react",
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
-        "rootDir": "./src",
-        "noEmitOnError": false,
-        "strictPropertyInitialization": false,
-        "forceConsistentCasingInFileNames": true,
-        "noFallthroughCasesInSwitch": true,
-        "noErrorTruncation": true,
-        "noImplicitReturns": true,
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "strictNullChecks": true,
-        "diagnostics": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "noUnusedLocals": true
-    },
-    "include": ["src/**/*", "../shared-types"],
-    "exclude": ["dist", "build", "node_modules"],
-    "defaultSeverity": "warning"
+  "compilerOptions": {
+    "target": "es5",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "sourceMap": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "lib": [
+      "esnext", "dom"
+    ]
+  }
 }

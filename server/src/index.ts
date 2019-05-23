@@ -1,32 +1,38 @@
-import Koa from 'koa'
-import cors from '@koa/cors'
-import helmet from 'koa-helmet'
-import winston from 'winston'
-import bodyParser from 'koa-bodyparser'
+import { GraphQLServer } from 'graphql-yoga'
+import { prisma } from './generated/prisma-client'
+import { Context } from './utils'
 
-import { logger } from './logger'
-import { config } from './config'
-import { router } from './routes'
-import { PgDb } from 'pogi'
-
-const app = new Koa()
-
-async function start() {
-    try {
-        const pgdb = await PgDb.connect({ connectionString: config.dbConnectionString })
-        app.context.db = pgdb.db
-        app.use(helmet())
-        app.use(cors())
-        app.use(logger(winston))
-        app.use(bodyParser())
-        app.use(router.routes())
-        app.use(router.allowedMethods())
-        app.listen(config.port)
-    } catch (err) {
-        throw new Error(err)
-    }
-
-    console.log(`Server running on port ${config.port}`)
+const resolvers = {
+  Query: {
+    feed(parent, args, context: Context) {
+      return context.prisma.posts({ where: { published: true } })
+    },
+    drafts(parent, args, context: Context) {
+      return context.prisma.posts({ where: { published: false } })
+    },
+    post(parent, { id }, context: Context) {
+      return context.prisma.post({ id })
+    },
+  },
+  Mutation: {
+    createDraft(parent, { title, content }, context: Context) {
+      return context.prisma.createPost({ title, content })
+    },
+    deletePost(parent, { id }, context: Context) {
+      return context.prisma.deletePost({ id })
+    },
+    publish(parent, { id }, context: Context) {
+      return context.prisma.updatePost({
+        where: { id },
+        data: { published: true },
+      })
+    },
+  },
 }
 
-start()
+const server = new GraphQLServer({
+  typeDefs: './src/schema.graphql',
+  resolvers,
+  context: { prisma },
+})
+server.start(() => console.log('Server is running on http://localhost:4000'))
