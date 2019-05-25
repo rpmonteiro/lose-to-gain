@@ -2,7 +2,7 @@ import * as dbTypes from '../db-types'
 import { PgDb } from 'pogi'
 
 declare module 'koa' {
-    interface BaseContext {
+    interface Context {
         db: PgDb
     }
 }

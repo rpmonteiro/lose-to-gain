@@ -12,7 +12,7 @@ exports.up = function(db) {
                 type: 'timestamp',
                 notNull: true
             },
-            goals: 'jsonb',
+            data: 'jsonb',
             end_date: {
                 notNull: true,
                 type: 'timestamp'

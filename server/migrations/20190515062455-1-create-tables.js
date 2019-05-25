@@ -19,6 +19,7 @@ exports.up = function(db) {
             last_name: {
                 type: 'string'
             },
+            weight_history: 'jsonb',
             google_id: {
                 unique: true,
                 type: 'string'

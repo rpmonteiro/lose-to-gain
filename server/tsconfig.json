@@ -2,10 +2,11 @@
     "compilerOptions": {
         "outDir": "dist",
         "target": "es5",
-        "lib": ["es6", "es7", "dom"],
+        "lib": ["es6", "es7", "dom", "es2015.promise", "es2015"],
         "typeRoots": ["./node_modules/@types", "./src/typings", "../shared-types"],
         "resolveJsonModule": true,
         "sourceMap": true,
+        "downlevelIteration": true,
         "allowJs": false,
         "jsx": "react",
         "esModuleInterop": true,

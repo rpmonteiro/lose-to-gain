@@ -1,7 +1,7 @@
 import { BaseContext } from 'koa'
-import * as dbTypes from '../db-types'
 import axios, { AxiosResponse } from 'axios'
 import querystring from 'querystring'
+import { findUser, saveUserFitbitAccessToken } from '../repository/user'
 
 interface FitbitAuthResponse {
     access_token: string
@@ -12,14 +12,8 @@ interface FitbitAuthResponse {
 const clientId = '22DPRT'
 
 export async function fitbitAuth(ctx: BaseContext) {
-    const { userId, fitbitAuthCode } = ctx.request.body
-
-    if (!userId || !fitbitAuthCode) {
-        ctx.throw(400, 'the data is not here!')
-        return
-    }
-
-    const user: dbTypes.users | undefined = await ctx.db.tables.users.findOne({ id: userId })
+    const { googleId, fitbitAuthCode } = ctx.request.body
+    const user = await findUser(ctx, googleId)
 
     if (!user) {
         ctx.throw(400, "Invalid user id. User doesn't exist")
@@ -59,12 +53,4 @@ function getFitbitAccessToken(fitbitAuthCode: string): Promise<AxiosResponse<Fit
             }
         }
     )
-}
-
-function saveUserFitbitAccessToken(
-    ctx: BaseContext,
-    userId: number,
-    accessToken: string
-): Promise<number> {
-    return ctx.db.tables.users.updateOne({ id: userId }, { fitbit_token: accessToken })
 }

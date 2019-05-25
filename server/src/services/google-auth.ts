@@ -1,14 +1,23 @@
-import { BaseContext } from 'koa'
+import { BaseContext, Context } from 'koa'
 import { OAuth2Client } from 'google-auth-library'
 import { config } from '../config'
 import * as dbTypes from '../db-types'
 import { sanitizeGoogleEmail } from '../utils/string-utils'
 import { UserVM } from '../../../shared-types'
 import { activateUser, createNewUser } from '../repository/user'
+import passport from 'koa-passport'
 
 const client = new OAuth2Client(config.googleAppId)
 
-export async function googleAuth(ctx: BaseContext) {
+export async function googleAuth(ctx: Context) {
+    // const user = await queries.addUser(ctx.request.body);
+    // return passport.authenticate('google', (err, user, info, status) => {
+    //   if (user) {
+    //     ctx.login(user);
+    //   } else {
+
+    //   }
+
     const googleIdToken = ctx.request.body.googleToken
     if (!googleIdToken) {
         ctx.throw(400, 'no token!')
