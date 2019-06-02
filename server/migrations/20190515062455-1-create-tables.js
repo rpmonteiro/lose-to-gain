@@ -1,7 +1,7 @@
 'use strict'
 
 exports.up = function(db) {
-    return db.createTable('users', {
+    return db.createTable('user', {
         columns: {
             id: {
                 type: 'int',
@@ -10,30 +10,18 @@ exports.up = function(db) {
             },
             email: {
                 type: 'string',
-                unique: true,
-                notNull: true
-            },
-            first_name: {
-                type: 'string'
-            },
-            last_name: {
-                type: 'string'
-            },
-            weight_history: 'jsonb',
-            google_id: {
-                unique: true,
-                type: 'string'
-            },
-            fitbit_token: {
-                type: 'string',
                 unique: true
             },
-            active: {
-                type: 'boolean',
-                defaultValue: false
+            firstName: {
+                type: 'string'
             },
-            invited_by: {
-                type: 'int'
+            lastName: {
+                type: 'string'
+            },
+            weightLogs: 'jsonb',
+            googleId: {
+                unique: true,
+                type: 'string'
             }
         }
     })

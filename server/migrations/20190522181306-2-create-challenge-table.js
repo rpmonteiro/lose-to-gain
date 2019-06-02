@@ -1,39 +1,28 @@
 'use strict'
 
 exports.up = function(db) {
-    return db.createTable('challenges', {
+    return db.createTable('challenge', {
         columns: {
             id: {
                 type: 'int',
                 primaryKey: true,
                 autoIncrement: true
             },
-            start_date: {
+            startDate: {
                 type: 'timestamp',
                 notNull: true
             },
             data: 'jsonb',
-            end_date: {
+            endDate: {
                 notNull: true,
                 type: 'timestamp'
-            },
-            goal_description: {
-                type: 'text',
-                notNull: true
-            },
-            goal_prize: {
-                type: 'text',
-                notNull: true
-            },
-            goal_image: {
-                type: 'text'
             }
         }
     })
 }
 
 exports.down = function(db) {
-    return db.dropTable('challenges')
+    return db.dropTable('challenge')
 }
 
 exports._meta = {

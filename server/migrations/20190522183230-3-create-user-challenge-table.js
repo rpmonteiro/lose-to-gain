@@ -1,19 +1,19 @@
 'use strict'
 
 exports.up = function(db) {
-    return db.createTable('users_challenges', {
+    return db.createTable('user_challenge', {
         columns: {
             id: {
                 type: 'int',
                 primaryKey: true,
                 autoIncrement: true
             },
-            challenge_id: {
+            challengeId: {
                 type: 'int',
                 notNull: true,
                 foreignKey: {
                     name: 'fk_users_challenges_challenge_id',
-                    table: 'challenges',
+                    table: 'challenge',
                     rules: {
                         onDelete: 'CASCADE',
                         onUpdate: 'RESTRICT'
@@ -21,12 +21,12 @@ exports.up = function(db) {
                     mapping: 'id'
                 }
             },
-            user_1: {
+            user1: {
                 type: 'int',
                 notNull: true,
                 foreignKey: {
                     name: 'fk_users_challenges_user1_id',
-                    table: 'users',
+                    table: 'user',
                     rules: {
                         onDelete: 'CASCADE',
                         onUpdate: 'RESTRICT'
@@ -34,12 +34,12 @@ exports.up = function(db) {
                     mapping: 'id'
                 }
             },
-            user_2: {
+            user2: {
                 type: 'int',
                 notNull: true,
                 foreignKey: {
                     name: 'fk_users_challenges_user2_id',
-                    table: 'users',
+                    table: 'user',
                     rules: {
                         onDelete: 'CASCADE',
                         onUpdate: 'RESTRICT'
@@ -52,7 +52,7 @@ exports.up = function(db) {
 }
 
 exports.down = function(db) {
-    return db.dropTable('users_challenges')
+    return db.dropTable('user_challenge')
 }
 
 exports._meta = {

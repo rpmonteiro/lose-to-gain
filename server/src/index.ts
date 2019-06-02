@@ -10,7 +10,7 @@ import { config } from './config'
 import { authRouter, userRouter, challengeRouter } from './routes'
 import { PgDb } from 'pogi'
 import passport from 'koa-passport'
-import { requireLogin } from './middleware/auth'
+// import { requireLogin } from './middleware/auth'
 
 const app = new Koa()
 const redisStore = RedisStore({})
@@ -37,7 +37,7 @@ async function start() {
         app.use(bodyParser())
 
         // routes
-        app.use(requireLogin)
+        // app.use(requireLogin)
         app.use(authRouter.middleware())
         app.use(userRouter.middleware())
         app.use(challengeRouter.middleware())

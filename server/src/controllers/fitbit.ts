@@ -28,18 +28,18 @@ function getFitbitWeightLogsForMonth(
     })
 }
 
-function refreshAccessToken(user: dbTypes.users): AxiosPromise<FitbitRefreshTokenResponse> {
-    return Axios.post(
-        'https://api.fitbit.com/oauth2/token',
-        querystring.stringify({
-            grant_type: 'refresh_token',
-            refresh_token: user.fitbit_refresh_token
-        }),
-        {
-            headers: {
-                'Content-type': 'application/x-www-form-urlencoded',
-                Authorization: 'Basic MjJEUFJUOjlkNjg4YzgxMjY4ZmFiYzdiMDFlZThjMTJmMmMyOGE1'
-            }
-        }
-    )
-}
+// function refreshAccessToken(user: dbTypes.users): AxiosPromise<FitbitRefreshTokenResponse> {
+//     return Axios.post(
+//         'https://api.fitbit.com/oauth2/token',
+//         querystring.stringify({
+//             grant_type: 'refresh_token',
+//             refresh_token: user.fitbit_refresh_token
+//         }),
+//         {
+//             headers: {
+//                 'Content-type': 'application/x-www-form-urlencoded',
+//                 Authorization: 'Basic MjJEUFJUOjlkNjg4YzgxMjY4ZmFiYzdiMDFlZThjMTJmMmMyOGE1'
+//             }
+//         }
+//     )
+// }
