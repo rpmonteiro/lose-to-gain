@@ -1,38 +1,13 @@
-import Koa from 'koa'
-import winston from 'winston'
+import { createLogger, format, transports } from 'winston'
 import { config } from './config'
+const { combine, timestamp, printf } = format
 
-export function logger(winstonInstance: typeof winston) {
-    return async (ctx: Koa.Context, next: () => Promise<any>) => {
-        const start = new Date().getMilliseconds()
-        await next()
-        const ms = new Date().getMilliseconds() - start
+const loggerFormat = printf((info: any) => {
+    return `${info.timestamp} | ${info.level}: ${info.message}`
+})
 
-        let logLevel = ''
-        if (ctx.status >= 500) {
-            logLevel = 'error'
-        }
-        if (ctx.status >= 400) {
-            logLevel = 'warn'
-        }
-        if (ctx.status >= 100) {
-            logLevel = 'info'
-        }
-
-        const msg = `${ctx.method} ${ctx.originalUrl} ${ctx.status} ${ms}ms`
-
-        winstonInstance.configure({
-            level: config.debugLogging ? 'debug' : 'info',
-            transports: [
-                //
-                // - Write to all logs with level `debug` and below to console.
-                new winston.transports.Console(),
-                //
-                // - Write all logs error (and below) to `error.log`.
-                new winston.transports.File({ filename: 'error.log', level: 'error' })
-            ]
-        })
-
-        winstonInstance.log(logLevel, msg)
-    }
-}
+export const logger = createLogger({
+    level: config.loggerLevel,
+    format: combine(format.colorize(), timestamp(), loggerFormat),
+    transports: [new transports.Console()]
+})
