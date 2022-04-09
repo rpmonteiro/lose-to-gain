@@ -33,7 +33,7 @@
         "koa-redis": "^4.0.0",
         "koa-router": "^7.4.0",
         "koa-session": "^5.12.0",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "moment-range": "^4.0.2",
         "pm2": "^3.2.3",
         "pogi": "^2.5.14",
